@@ -1,0 +1,99 @@
+/* General Page Styling */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    transition: background-color 0.5s ease-in-out;
+}
+
+/* Rope & Bulb Styling */
+.container {
+    position: relative;
+}
+
+.bulb-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.bulb {
+    width: 80px;
+    height: 80px;
+    background-color: #333;
+    border-radius: 50%;
+    position: relative;
+    transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.bulb-holder {
+    width: 30px;
+    height: 40px;
+    background: #666;
+    margin-top: -10px;
+    border-radius: 5px;
+}
+
+.glow {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: -10px;
+    left: -10px;
+    background: radial-gradient(circle, rgba(255, 255, 180, 0.8) 0%, rgba(255, 255, 180, 0.4) 50%, rgba(0,0,0,0) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Rope */
+.rope-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rope {
+    width: 5px;
+    height: 100px;
+    background: white;
+    transition: height 0.2s ease-in-out, transform 0.5s ease-in-out;
+    transform-origin: top;
+}
+
+/* Rope End */
+.rope-end {
+    width: 25px;
+    height: 25px;
+    background: white;
+    border-radius: 50%;
+    cursor: grab;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* ON State */
+.bulb.on {
+    background-color: lightyellow;
+    box-shadow: 0 0 40px rgba(255, 255, 180, 0.8);
+}
+
+.bulb.on .glow {
+    opacity: 1;
+}
+
+/* Background Change */
+body.on {
+    background-color: lightyellow;
+    color: black;
+}
+/* Hide the bulb and text initially */
+.bulb-wrapper, #bulbInstruction {
+    display: none;
+}
