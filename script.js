@@ -3,14 +3,8 @@ let bulbOn = false;
 let isPulling = false;
 let startY = 0;
 let endY = 0;
-
-
-
 // Play notification sound when DOB is correct
 const notificationSound = new Audio("notification.mp3"); 
-
-
-
 // **Rope for Opening Screen**
 document.getElementById("screenRopeEnd").addEventListener("click", function () {
     document.getElementById("startScreen").style.display = "none";
@@ -60,12 +54,11 @@ document.addEventListener("touchend", endPull);
 
 function startPull(e) {
     isPulling = true;
-    startY = e.touches ? e.touches[0].clientY : e.clientY; // Handle both mouse & touch
+    startY = e.clientY || e.touches[0].clientY; // Handle both mouse & touch
 }
-
 function pulling(e) {
     if (!isPulling) return;
-    endY = e.touches ? e.touches[0].clientY :e.clientY;
+    endY = e.clientY;
     let distance = endY - startY;
 
     if (distance > 10 && distance < 50) {
@@ -78,8 +71,8 @@ function endPull() {
     isPulling = false;
 
     if (endY - startY > 40) {
-        isBulbOn = !BulbOn;
-        if (BulbOn) {
+        bulbOn = !bulbOn;
+        if (bulbOn) {
             bulb.classList.add("on");
             body.classList.add("on");
         } else {
