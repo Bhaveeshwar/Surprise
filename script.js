@@ -3,8 +3,10 @@ let bulbOn = false;
 let isPulling = false;
 let startY = 0;
 let endY = 0;
+
 // Play notification sound when DOB is correct
-const notificationSound = new Audio("notification.mp3"); 
+const notificationSound = new Audio("notification.mp3");
+
 // **Rope for Opening Screen**
 document.getElementById("screenRopeEnd").addEventListener("click", function () {
     document.getElementById("startScreen").style.display = "none";
@@ -13,8 +15,8 @@ document.getElementById("screenRopeEnd").addEventListener("click", function () {
 
 // **Username to DOB Flow**
 function showDOB() {
-    let username = document.getElementById("username").value;
-    if (username.trim() === "") {
+    let username = document.getElementById("username").value.trim();
+    if (!username) {
         alert("Please enter your name!");
         return;
     }
@@ -24,15 +26,16 @@ function showDOB() {
 
 // **Check DOB and Store Validity**
 function checkDOB() {
-    let dob = document.getElementById("dob").value;
+    let dob = document.getElementById("dob").value.trim();
     if (dob === "31072006") {
         isDOBCorrect = true;
         document.getElementById("dobContainer").style.display = "none";
 
-        // Make the bulb and text visible
+        // Show bulb and instruction text
         document.querySelector(".bulb-wrapper").style.display = "flex";
-        document.getElementById("bulbInstruction").style.display = "block"; // Show the instruction text
- // Play Notification Sound
+        document.getElementById("bulbInstruction").style.display = "block";
+
+        // Play Notification Sound
         notificationSound.play();
         checkContentVisibility();
     } else {
@@ -44,25 +47,29 @@ function checkDOB() {
 const bulbRopeEnd = document.getElementById("bulbRopeEnd");
 const bulb = document.querySelector(".bulb");
 const body = document.body;
+const bulbRope = document.getElementById("bulbRope");
 
-// Detect Pulling
-
+// Detect Pulling (Supports Mouse & Touch)
+bulbRopeEnd.addEventListener("mousedown", startPull);
 bulbRopeEnd.addEventListener("touchstart", startPull);
-document.addEventListener("touchmove", pulling);
-document.addEventListener("touchend", endPull);
 
+document.addEventListener("mousemove", pulling);
+document.addEventListener("mouseup", endPull);
+document.addEventListener("touchmove", pulling, { passive: false });
+document.addEventListener("touchend", endPull);
 
 function startPull(e) {
     isPulling = true;
-    startY = e.clientY || e.touches[0].clientY; // Handle both mouse & touch
+    startY = e.clientY || e.touches[0].clientY;
 }
+
 function pulling(e) {
     if (!isPulling) return;
-    endY = e.clientY;
-    let distance = endY - startY;
+    endY = e.clientY || e.touches[0].clientY;
+    let distance = Math.min(50, Math.max(0, endY - startY)); // Limit stretch
 
-    if (distance > 10 && distance < 50) {
-        document.getElementById("bulbRope").style.height = 100 + distance + "px";
+    if (distance > 10) {
+        bulbRope.style.height = `${100 + distance}px`;
     }
 }
 
@@ -72,16 +79,11 @@ function endPull() {
 
     if (endY - startY > 40) {
         bulbOn = !bulbOn;
-        if (bulbOn) {
-            bulb.classList.add("on");
-            body.classList.add("on");
-        } else {
-            bulb.classList.remove("on");
-            body.classList.remove("on");
-        }
+        bulb.classList.toggle("on", bulbOn);
+        body.classList.toggle("on", bulbOn);
     }
 
-    document.getElementById("bulbRope").style.height = "100px";
+    bulbRope.style.height = "100px";
     checkContentVisibility();
 }
 
